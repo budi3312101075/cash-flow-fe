@@ -114,6 +114,8 @@ const dummyTransactions = [
   },
 ];
 
+const fullname = "Budi Prayoga";
+
 const categories = [
   { name: "Makanan", icon: Utensils, color: "bg-orange-500", amount: 400000 },
   { name: "Transportasi", icon: Car, color: "bg-blue-500", amount: 50000 },
@@ -128,7 +130,7 @@ export default function CashFlowApp() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [txType, setTxType] = useState("expense");
 
-  const totalIncome = 15000000;
+  const totalIncome = 150000000;
   const totalExpense = 5265000;
   const balance = totalIncome - totalExpense;
 
@@ -149,11 +151,11 @@ export default function CashFlowApp() {
         <div className="px-6 pt-8 pb-4">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <p className="text-slate-400 text-sm">Selamat Pagi 👋</p>
-              <h1 className="text-xl font-bold">Budi Prayoga</h1>
+              <p className="text-slate-400 text-sm">Hellow Mas bro 👋</p>
+              <h1 className="text-xl font-bold"> {fullname}</h1>
             </div>
             <div className="w-12 h-12 rounded-full bg-linear-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-lg font-bold">
-              AR
+              {fullname?.charAt(0).toUpperCase()}
             </div>
           </div>
 
