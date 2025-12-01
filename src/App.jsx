@@ -271,7 +271,7 @@ export default function CashFlowApp() {
       {/* Add Transaction Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end">
-          <div className="bg-slate-900 w-full max-w-md mx-auto rounded-t-3xl p-6 animate-slide-up">
+          <div className="bg-slate-900 w-full max-w-md mx-auto rounded-t-3xl p-6 animate-slide-up mb-16">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-bold">Tambah Transaksi</h3>
               <button
