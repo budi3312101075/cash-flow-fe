@@ -217,6 +217,7 @@ const Homes = () => {
           txType={txType}
           setTxType={setTxType}
           categories={categories}
+          banks={bank}
         />
       )}
 
