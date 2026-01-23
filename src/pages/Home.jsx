@@ -23,10 +23,15 @@ const tailwindColors = [
   "bg-emerald-500",
   "bg-orange-500",
   "bg-yellow-500",
+  "bg-cyan-500",
+  "bg-indigo-500",
+  "bg-purple-500",
+  "bg-rose-500",
 ];
 
+// Fungsi untuk mendapatkan warna random yang unik
 const getRandomUniqueColors = (count) => {
-  const shuffled = tailwindColors.sort(() => 0.5 - Math.random());
+  const shuffled = [...tailwindColors].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count);
 };
 
@@ -36,10 +41,12 @@ const Homes = () => {
   const [activeTab, setActiveTab] = useState("home");
   const [showAddModal, setShowAddModal] = useState(false);
   const [txType, setTxType] = useState("expense");
-  const [bank, setBank] = useState("all");
+  const [selectedBank, setSelectedBank] = useState("all");
 
   const [categories, setCategories] = useState([]);
+  const [categoriesOriginal, setCategoriesOriginal] = useState([]);
   const [transactions, setTransactions] = useState([]);
+  const [bankList, setBankList] = useState([]);
   const [summary, setSummary] = useState({
     totalBalance: 0,
     totalIncome: 0,
@@ -48,25 +55,32 @@ const Homes = () => {
 
   const getData = async () => {
     try {
-      const response = await axios.get(`/transactions/${bank}`);
+      const response = await axios.get(`/transactions/${selectedBank}`);
       const data = response.data.data;
 
       setSummary(data.summary);
+      setBankList(data.bank);
 
-      const rawCategories = data.expensesByCategory;
-      const randomColors = getRandomUniqueColors(rawCategories.length);
+      // Simpan data original untuk modal
+      setCategoriesOriginal(data.expensesByCategory || []);
 
-      const mappedCategories = rawCategories.map((c, i) => {
-        return {
-          name: c.category,
-          amount: c.amount,
-          icon: getIconComponent(c.icon || c.iconName),
-          color: randomColors[i],
-        };
-      });
+      // Dapatkan warna random yang unik untuk setiap kategori
+      const randomColors = getRandomUniqueColors(
+        data.expensesByCategory?.length || 0,
+      );
 
-      setCategories(mappedCategories);
-      setTransactions(data.transactions);
+      // Map expensesByCategory ke format yang sesuai dengan component
+      const categoriesWithColors = (data.expensesByCategory || []).map(
+        (cat, index) => ({
+          name: cat.category,
+          amount: cat.amount,
+          icon: getIconComponent(cat.icon),
+          color: randomColors[index] || tailwindColors[0],
+        }),
+      );
+
+      setCategories(categoriesWithColors);
+      setTransactions(data.transactions || []);
     } catch (err) {
       console.log(err);
     }
@@ -74,7 +88,11 @@ const Homes = () => {
 
   useEffect(() => {
     getData();
-  }, [bank]);
+  }, [selectedBank]);
+
+  const handleBankChange = (e) => {
+    setSelectedBank(e.target.value);
+  };
 
   return (
     <div className="min-h-screen bg-slate-950 text-white relative overflow-hidden">
@@ -89,6 +107,35 @@ const Homes = () => {
             <div className="w-12 h-12 rounded-full bg-linear-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-lg font-bold">
               {fullname.charAt(0).toUpperCase()}
             </div>
+          </div>
+
+          {/* Bank Filter */}
+          <div className="mb-4 relative">
+            <select
+              value={selectedBank}
+              onChange={handleBankChange}
+              className="w-full appearance-none bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl px-4 py-3 pr-10 text-white focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all"
+            >
+              {bankList.map((bank) => (
+                <option key={bank.id} value={bank.id} className="bg-slate-900">
+                  {bank.name === "all" ? "Semua Bank" : bank.name}
+                </option>
+              ))}
+            </select>
+
+            {/* Icon dropdown */}
+            <svg
+              className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-300"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
+                clipRule="evenodd"
+              />
+            </svg>
           </div>
 
           {/* Balance Card */}
@@ -133,7 +180,7 @@ const Homes = () => {
           </div>
 
           <div className="grid grid-cols-3 gap-3">
-            {categories.slice(0, 6).map((cat, i) => {
+            {categories.map((cat, i) => {
               const IconComp = cat.icon;
 
               return (
@@ -216,8 +263,9 @@ const Homes = () => {
           setShowAddModal={setShowAddModal}
           txType={txType}
           setTxType={setTxType}
-          categories={categories}
-          banks={bank}
+          categories={categoriesOriginal}
+          banks={bankList}
+          getData={getData}
         />
       )}
 
