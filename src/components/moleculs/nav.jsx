@@ -6,12 +6,14 @@ import {
   TrendingUp,
   Wallet,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Nav = ({ setActiveTab, setShowAddModal, activeTab }) => {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-slate-900/90 backdrop-blur-lg border-t border-slate-800 z-50">
       <div className="max-w-md mx-auto px-6 py-2 flex items-center justify-around">
-        <button
+        <Link
+          to="/"
           onClick={() => setActiveTab("home")}
           className={`flex flex-col items-center gap-1 p-2 ${
             activeTab === "home" ? "text-violet-400" : "text-slate-500"
@@ -19,8 +21,9 @@ const Nav = ({ setActiveTab, setShowAddModal, activeTab }) => {
         >
           <Wallet className="w-6 h-6" />
           <span className="text-xs">Beranda</span>
-        </button>
-        <button
+        </Link>
+        <Link
+          to="/stats"
           onClick={() => setActiveTab("stats")}
           className={`flex flex-col items-center gap-1 p-2 ${
             activeTab === "stats" ? "text-violet-400" : "text-slate-500"
@@ -28,7 +31,7 @@ const Nav = ({ setActiveTab, setShowAddModal, activeTab }) => {
         >
           <PieChart className="w-6 h-6" />
           <span className="text-xs">Statistik</span>
-        </button>
+        </Link>
         <button
           onClick={() => setShowAddModal(true)}
           className="w-14 h-14 -mt-6 bg-linear-to-br from-violet-600 to-fuchsia-600 rounded-full flex items-center justify-center shadow-lg shadow-violet-500/30"

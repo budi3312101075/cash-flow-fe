@@ -29,7 +29,6 @@ const tailwindColors = [
   "bg-rose-500",
 ];
 
-// Fungsi untuk mendapatkan warna random yang unik
 const getRandomUniqueColors = (count) => {
   const shuffled = [...tailwindColors].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count);
@@ -61,15 +60,12 @@ const Homes = () => {
       setSummary(data.summary);
       setBankList(data.bank);
 
-      // Simpan data original untuk modal
       setCategoriesOriginal(data.expensesByCategory || []);
 
-      // Dapatkan warna random yang unik untuk setiap kategori
       const randomColors = getRandomUniqueColors(
         data.expensesByCategory?.length || 0,
       );
 
-      // Map expensesByCategory ke format yang sesuai dengan component
       const categoriesWithColors = (data.expensesByCategory || []).map(
         (cat, index) => ({
           name: cat.category,
@@ -97,7 +93,6 @@ const Homes = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-white relative overflow-hidden">
       <div className="relative z-10 max-w-md mx-auto pb-24">
-        {/* Header */}
         <div className="px-6 pt-8 pb-4">
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -109,7 +104,6 @@ const Homes = () => {
             </div>
           </div>
 
-          {/* Bank Filter */}
           <div className="mb-4 relative">
             <select
               value={selectedBank}
@@ -118,12 +112,13 @@ const Homes = () => {
             >
               {bankList.map((bank) => (
                 <option key={bank.id} value={bank.id} className="bg-slate-900">
-                  {bank.name === "all" ? "Semua Bank" : bank.name}
+                  {bank.name === "all"
+                    ? "🏦 Semua Akun Bank"
+                    : `💳 ${bank.name}`}
                 </option>
               ))}
             </select>
 
-            {/* Icon dropdown */}
             <svg
               className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-300"
               viewBox="0 0 20 20"
@@ -138,7 +133,6 @@ const Homes = () => {
             </svg>
           </div>
 
-          {/* Balance Card */}
           <div className="bg-linear-to-br from-violet-600 via-fuchsia-600 to-pink-500 rounded-3xl p-6 shadow-2xl">
             <p className="text-white/70 text-sm mb-1">Total Saldo</p>
             <h2 className="text-3xl font-bold mb-6">
@@ -173,7 +167,6 @@ const Homes = () => {
           </div>
         </div>
 
-        {/* Categories */}
         <div className="px-6 py-4">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold">Kategori Pengeluaran</h3>
@@ -203,7 +196,6 @@ const Homes = () => {
           </div>
         </div>
 
-        {/* Transactions */}
         <div className="px-6 py-4">
           <h3 className="font-semibold mb-4">Transaksi Terbaru</h3>
 

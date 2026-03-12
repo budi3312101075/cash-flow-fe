@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import axios from "axios";
 import "./index.css";
 import Homes from "./pages/Home";
+import Statistik from "./pages/statistik";
 
 function App() {
   axios.defaults.baseURL = import.meta.env.VITE_API_URL;
@@ -33,6 +34,7 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Homes />} />
+        <Route path="/stats" element={<Statistik />} />
       </Routes>
     </>
   );
